@@ -1,0 +1,21 @@
+runtime: python27
+api_version: 1
+threadsafe: yes
+
+handlers:
+- url: /opgate
+  script: main.app
+
+- url: /_ah/push-handlers/.*
+  script: main.app
+  login: admin
+
+libraries:
+- name: ssl
+  version: latest
+
+#[START env]
+env_variables:
+    PUBSUB_TOPIC: topic
+    GOOGLE_CLOUD_PROJECT: project_id
+#[END env]
