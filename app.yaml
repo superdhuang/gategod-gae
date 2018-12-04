@@ -15,8 +15,6 @@ libraries:
   version: latest
 
 automatic_scaling:
-  max_idle_instances: 1
-  max_instances: 1
   max_concurrent_requests: 2
 
 #basic_scaling:
