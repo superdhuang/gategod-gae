@@ -50,7 +50,7 @@ def index():
         project_id=app.config['GCLOUD_PROJECT'],
         topic=app.config['PUBSUB_TOPIC']
     )
-    if data == 'key':
+    if data == 'yanji':
         service.projects().topics().publish(
             topic=topic_path, body={
               "messages": [{
@@ -60,6 +60,24 @@ def index():
 
     return 'OK', 200
 # [END index]
+
+
+# [START push]
+@app.route('/_ah/push-handlers/receive_messages', methods=['POST'])
+def receive_messages_handler():
+    if (request.args.get('token', '') !=
+            current_app.config['PUBSUB_VERIFICATION_TOKEN']):
+        return 'Invalid request', 400
+
+    envelope = json.loads(request.data.decode('utf-8'))
+    payload = base64.b64decode(envelope['message']['data'])
+
+    MESSAGES.append(payload)
+
+    # Returning any 2xx status indicates successful receipt of the message.
+    return 'OK', 200
+# [END push]
+
 
 @app.errorhandler(500)
 def server_error(e):
